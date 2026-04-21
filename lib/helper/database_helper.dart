@@ -1,3 +1,4 @@
+import 'package:app_catatan/models/note.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -28,5 +29,26 @@ class DatabaseHelper {
         created_at TEXT NOT NULL
       )
     ''');
+  }
+
+  Future<List<Note>> getAll() async {
+    final db = await database;
+    final maps = await db.query('notes', orderBy: 'created_at DESC');
+    return maps.map((m) => Note.fromMap(m)).toList();
+  }
+
+  Future<int> update(Note note) async {
+    final db = await database;
+    return await db.update(
+      'notes',
+      note.toMap(),
+      where: 'id = ?',
+      whereArgs: [note.id],
+    );
+  }
+
+  Future<int> delete(int id) async {
+    final db = await database;
+    return await db.delete('notes', where: 'id = ?', whereArgs: [id]);
   }
 }
