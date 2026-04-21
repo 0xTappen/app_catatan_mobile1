@@ -15,9 +15,19 @@ class Note {
   factory Note.fromMap(Map<String, dynamic> map) {
     return Note(
       id: map['id'] as int?,
-      title: map['tittle'] as String,
+      title: map['title'] as String,
       content: map['content'] as String,
       createdAt: map['createdAt'] as String,
     );
+  }
+
+  // dari aplikasi ke database (kirim data)
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'content': content,
+      'createdAt': createdAt,
+    };
   }
 }
