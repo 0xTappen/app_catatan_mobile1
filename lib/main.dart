@@ -1,3 +1,6 @@
+import 'package:app_catatan/models/note.dart';
+import 'package:app_catatan/screens/notes_from_screen.dart';
+import 'package:app_catatan/screens/notes_list_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,6 +12,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold());
+    return MaterialApp(
+      title: 'Flutter SQLite',
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      home: const NotesListScreen(),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/form') {
+          final note = settings.arguments as Note?;
+          return MaterialPageRoute(builder: (_) => NotesFromScreen(note: note));
+        }
+        return null;
+      },
+    );
   }
 }

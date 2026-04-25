@@ -47,6 +47,11 @@ class DatabaseHelper {
     );
   }
 
+  Future<int> insert(Note note) async {
+    final db = await database;
+    return await db.insert('notes', note.toMap());
+  }
+
   Future<int> delete(int id) async {
     final db = await database;
     return await db.delete('notes', where: 'id = ?', whereArgs: [id]);
