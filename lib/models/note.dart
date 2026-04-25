@@ -17,7 +17,7 @@ class Note {
       id: map['id'] as int?,
       title: map['title'] as String,
       content: map['content'] as String,
-      createdAt: map['createdAt'] as String,
+      createdAt: map['created_at'] as String,
     );
   }
 
@@ -27,7 +27,7 @@ class Note {
       'id': id,
       'title': title,
       'content': content,
-      'createdAt': createdAt,
+      'created_at': createdAt,
     };
   }
 }

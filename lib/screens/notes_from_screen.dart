@@ -44,6 +44,35 @@ class _NotesFromScreenState extends State<NotesFromScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: Text(isEditing ? 'Edit Catatan' : 'Tambah Catatan')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _titleCtrl,
+                decoration: const InputDecoration(labelText: 'Judul'),
+                validator: (v) => v!.isEmpty ? 'Judul tidak boleh kosong' : null,
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _contentCtrl,
+                decoration: const InputDecoration(labelText: 'Isi'),
+                maxLines: 4,
+                validator: (v) => v!.isEmpty ? 'Isi tidak boleh kosong' : null,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _saveNote,
+                child: Text(isEditing ? 'Update' : 'Simpan'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
