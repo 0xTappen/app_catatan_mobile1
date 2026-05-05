@@ -1,3 +1,4 @@
+import 'package:app_catatan/helper/auth_helper.dart';
 import 'package:app_catatan/helper/database_helper.dart';
 import 'package:app_catatan/models/note.dart';
 import 'package:flutter/material.dart';
@@ -13,17 +14,16 @@ class _NotesListScreenState extends State<NotesListScreen> {
   List<Note> _notes = [];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _refreshNotes();
   }
-  
+
   Future<void> _refreshNotes() async {
     final notes = await DatabaseHelper.instance.getAll();
     setState(() {
       _notes = notes;
     });
-  
   }
 
   Future<void> _deleteNote(int id) async {
@@ -34,13 +34,22 @@ class _NotesListScreenState extends State<NotesListScreen> {
     ).showSnackBar(SnackBar(content: Text("Catatan berhasil dihapus")));
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Catatan")),
-        body: _notes.isEmpty
+        title: Text("Catatan"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.red),
+            onPressed: () async {
+              await AuthHelper.logout();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+          ),
+        ],
+      ),
+      body: _notes.isEmpty
           ? const Center(child: Text('Belum ada catatan'))
           : ListView.builder(
               itemCount: _notes.length,
@@ -48,13 +57,21 @@ class _NotesListScreenState extends State<NotesListScreen> {
                 final note = _notes[index];
                 return ListTile(
                   title: Text(note.title),
-                  subtitle: Text(note.content, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  subtitle: Text(
+                    note.content,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () => _deleteNote(note.id!),
                   ),
                   onTap: () async {
-                    await Navigator.pushNamed(context, '/form', arguments: note);
+                    await Navigator.pushNamed(
+                      context,
+                      '/form',
+                      arguments: note,
+                    );
                     _refreshNotes();
                   },
                 );
